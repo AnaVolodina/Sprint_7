@@ -2,6 +2,7 @@ import requests
 import random
 import string
 from endpoints import URL
+from data import TestData
 
 
 def generate_random_string(length):
@@ -45,5 +46,18 @@ def register_new_courier_and_return_login_password():
     # возвращаем список
     return login_pass
 
+def login_and_get_courier_id(payload):
+    login_response = requests.post(URL.LOGIN_COURIER, json=payload)
+    assert login_response.status_code == 200
+    courier_id = login_response.json().get('id')
+    assert courier_id is not None
+    return courier_id
 
+def delete_courier(courier_id):
+    delete_response = requests.delete(f"{URL.CREATE_COURIER}/{courier_id}")
+    assert delete_response.status_code == 200
 
+def cancel_an_order(track):
+    payload = {"track": track}
+    response = requests.put(URL.CANCEL_AN_ORDER, json=payload)
+    return response

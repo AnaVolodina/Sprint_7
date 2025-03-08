@@ -8,6 +8,8 @@ class TestData:
     MESSAGE_BAD_REQUEST_CREATE_ACCOUNT = {'code': 400, "message": "Недостаточно данных для создания учетной записи"}
     MESSAGE_NOT_FOUND = {'code': 404, "message": "Учетная запись не найдена"}
     MESSAGE_BAD_REQUEST_LOGIN = {'code': 400, "message": "Недостаточно данных для входа"}
+    OK_RESPONSE = {"ok": True}
+
 
     ORDER_DATA_BLACK = {
         "firstName": "John",

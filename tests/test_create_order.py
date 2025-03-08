@@ -3,6 +3,7 @@ import requests
 import pytest
 from endpoints import URL
 from data import TestData
+from helper import cancel_an_order
 
 
 class TestCreateOrder:
@@ -17,3 +18,5 @@ class TestCreateOrder:
         payload = color
         response = requests.post(URL.CREATE_ORDER, json=payload)
         assert response.status_code == 201 and 'track' in response.json()
+        track = response.json().get('track')
+        cancel_an_order(track)

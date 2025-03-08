@@ -2,7 +2,7 @@ import allure
 import requests
 import pytest
 from endpoints import URL
-from helper import register_new_courier_and_return_login_password, generate_random_string
+from helper import register_new_courier_and_return_login_password, generate_random_string, delete_courier, login_and_get_courier_id
 from data import TestData
 
 
@@ -16,6 +16,8 @@ class TestLoginCourier:
         payload = {'login': login, 'password': password}
         response = requests.post(URL.LOGIN_COURIER, data=payload)
         assert response.status_code == 200 and 'id' in response.json()
+        courier_id = login_and_get_courier_id(payload)
+        delete_courier(courier_id)
 
     @allure.description('Проверка неуспешной авторизации при незаполненных обязательных полях')
     @pytest.mark.parametrize('login, password', [

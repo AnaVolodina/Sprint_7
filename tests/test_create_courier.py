@@ -2,7 +2,7 @@ import allure
 import requests
 import pytest
 from endpoints import URL
-from helper import generate_random_string
+from helper import generate_random_string, delete_courier, login_and_get_courier_id
 from data import TestData
 
 
@@ -13,14 +13,17 @@ class TestCreateCourier:
         payload = {'login': generate_random_string(10), 'password': generate_random_string(10), 'firstName': generate_random_string(10)}
         headers = {'Content-Type': 'application/json'}
         response = requests.post(URL.CREATE_COURIER, json=payload, headers=headers)
-        assert response.status_code == 201 and response.json() == {"ok": True}
-
+        assert response.status_code == 201 and response.json() == TestData.OK_RESPONSE
+        courier_id = login_and_get_courier_id(payload)
+        delete_courier(courier_id)
     @allure.description('Проверка возможности создания курьера при заполнении обязательных полей валидными данными')
     def test_create_courier_required_fields_filled_account_created(self):
         payload = {'login': generate_random_string(10), 'password': generate_random_string(10)}
         headers = {'Content-Type': 'application/json'}
         response = requests.post(URL.CREATE_COURIER, json=payload, headers=headers)
-        assert response.status_code == 201 and response.json() == {"ok": True}
+        assert response.status_code == 201 and response.json() == TestData.OK_RESPONSE
+        courier_id = login_and_get_courier_id(payload)
+        delete_courier(courier_id)
 
     @allure.description('Проверка появления сообщения об ошибке при попытке создания курьера с существующим логином')
     def test_create_courier_with_existing_login_error(self):
